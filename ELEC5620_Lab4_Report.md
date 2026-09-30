@@ -777,7 +777,7 @@ classDiagram
 This object diagram captures a specific moment when MapAgent is calculating scores for properties.
 
 ```mermaid
-objectDiagram
+flowchart TB
     object mapAgentInstance {
         <<MapAgent, Member D>>
         status = "calculating"
