@@ -27,7 +27,7 @@
 
 | Member | Student ID | Responsible Agent | Code Files | Document Sections |
 |--------|------------|-------------------|------------|-------------------|
-| **Member A** | _________ | 🤖 **Conversation Agent** (信息采集Agent) | `lib/conversation-agent.ts`, `lib/types.ts`, `components/ChatBubble.tsx`, `components/ChatInput.tsx` | §2 AHR-01, §5 UC-01/UC-02, §9 AD-01/AD-02, §10 ID-05, §11 STM-01 |
+| **Member A** | __wending__ | 🤖 **Conversation Agent** (信息采集Agent) | `lib/conversation-agent.ts`, `lib/types.ts`, `components/ChatBubble.tsx`, `components/ChatInput.tsx` | §2 AHR-01, §5 UC-01/UC-02, §9 AD-01/AD-02, §10 ID-05, §11 STM-01 |
 | **Member B** | _________ | 🎯 **Matching Agent** (房源匹配Agent) | `lib/matching-agent.ts`, `lib/properties.ts`, `components/PropertyCard.tsx`, `app/page.tsx`, `app/layout.tsx` | §2 AHR-02, §5 UC-03/UC-04, §9 AD-03, §10 ID-03, §11 STM-04 |
 | **Member C** | _________ | 📄 **Document Agent** (文档识别Agent) | `lib/document-agent.ts`, `components/PassportUpload.tsx` | §2 AHR-03, §5 UC-05, §9 AD-04, §10 ID-01, §11 STM-02 |
 | **Member D** | _________ | 🗺️ **Map Agent** (地图评分Agent) | `lib/map-agent.ts`, `components/MapView.tsx` | §2 AHR-04, §5 UC-04, §9 AD-05, §10 ID-02, §11 STM-05, §8 OD-01/CD-01, §13 Deployment |
@@ -99,6 +99,7 @@ graph TB
     UI -->|Submit Application| User
 ```
 
+(./figures/1.png)
 **Figure 1**: Ad hoc overview diagram showing the 5-agent architecture of HomeMatch AI.
 
 ---
