@@ -99,7 +99,6 @@ graph TB
     UI -->|Submit Application| User
 ```
 
-(./figures/1.png)
 **Figure 1**: Ad hoc overview diagram showing the 5-agent architecture of HomeMatch AI.
 
 ---
