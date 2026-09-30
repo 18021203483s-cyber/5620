@@ -778,70 +778,34 @@ This object diagram captures a specific moment when MapAgent is calculating scor
 
 ```mermaid
 flowchart TB
-    object mapAgentInstance {
-        <<MapAgent, Member D>>
-        status = "calculating"
-        currentPropertyIndex = 3
-    }
+    userProfile["userProfile : UserProfile<br/>name = John Smith<br/>budget_max = 600<br/>preferredAreas = Sydney CBD"]
     
-    object property_SydneyCBD_001 {
-        id = "prop-001"
-        address = "101 George Street"
-        suburb = "Sydney CBD"
-        lat = -33.8688
-        lng = 151.2093
-        price = 650
-        bedrooms = 2
-    }
+    scoredProperty_001["scoredProperty_001 : ScoredProperty<br/>id = prop-001<br/>matchScore = 92<br/>parkScore = 90<br/>busScore = 95<br/>trainScore = 100<br/>mapScore = 95<br/>totalScore = 93"]
     
-    object osmResponse_parks {
-        <<external, Member D>>
-        query = "leisure=park"
-        count = 5
-        nearestDistance = 250
-        responseTime = 320ms
-    }
+    mapAgentInstance["mapAgentInstance : MapAgent<br/>status = calculating<br/>currentPropertyIndex = 3"]
     
-    object osmResponse_buses {
-        <<external, Member D>>
-        query = "highway=bus_stop"
-        count = 12
-        nearestDistance = 150
-        responseTime = 280ms
-    }
+    property_SydneyCBD_001["property_SydneyCBD_001 : Property<br/>id = prop-001<br/>address = 101 George Street<br/>suburb = Sydney CBD<br/>lat = -33.8688, lng = 151.2093<br/>price = 650<br/>bedrooms = 2"]
     
-    object osmResponse_trains {
-        <<external, Member D>>
-        query = "railway=station"
-        count = 1
-        nearestDistance = 100
-        responseTime = 290ms
-    }
+    osmParks["osmResponse_parks : OSMResponse<br/>query = leisure=park<br/>count = 5<br/>nearestDistance = 250m<br/>responseTime = 320ms"]
     
-    object scoredProperty_001 {
-        <<ScoredProperty, Member B>>
-        id = "prop-001"
-        matchScore = 92
-        parkScore = 90
-        busScore = 95
-        trainScore = 100
-        mapScore = 95
-        totalScore = 93
-    }
+    osmBuses["osmResponse_buses : OSMResponse<br/>query = highway=bus_stop<br/>count = 12<br/>nearestDistance = 150m<br/>responseTime = 280ms"]
     
-    object userProfile {
-        <<UserProfile, Member A>>
-        name = "John Smith"
-        budget_max = 600
-        preferredAreas = ["Sydney CBD"]
-    }
+    osmTrains["osmResponse_trains : OSMResponse<br/>query = railway=station<br/>count = 1<br/>nearestDistance = 100m<br/>responseTime = 290ms"]
     
-    mapAgentInstance --> property_SydneyCBD_001 : processing
-    mapAgentInstance --> osmResponse_parks : queried
-    mapAgentInstance --> osmResponse_buses : queried
-    mapAgentInstance --> osmResponse_trains : queried
-    mapAgentInstance --> scoredProperty_001 : produces
-    scoredProperty_001 --> userProfile : scored against
+    mapAgentInstance -->|"processing"| property_SydneyCBD_001
+    mapAgentInstance -->|"queried"| osmParks
+    mapAgentInstance -->|"queried"| osmBuses
+    mapAgentInstance -->|"queried"| osmTrains
+    mapAgentInstance -->|"produces"| scoredProperty_001
+    scoredProperty_001 -->|"scored against"| userProfile
+    
+    style mapAgentInstance fill:#9966CC,stroke:#663399,color:#fff
+    style scoredProperty_001 fill:#FF9933,stroke:#cc6600,color:#fff
+    style userProfile fill:#4287F5,stroke:#1e5bb8,color:#fff
+    style property_SydneyCBD_001 fill:#E8F4FD,stroke:#1e5bb8
+    style osmParks fill:#F0F0F0,stroke:#666
+    style osmBuses fill:#F0F0F0,stroke:#666
+    style osmTrains fill:#F0F0F0,stroke:#666
 ```
 
 **Figure 5**: Object diagram showing Map Agent runtime interactions.
