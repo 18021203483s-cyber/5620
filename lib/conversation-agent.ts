@@ -109,8 +109,9 @@ SUBURB RECOGNITION - Common typos and variations:
 
 BUDGET RECOGNITION:
 - "100-200" or "$100-200" = Budget $100-200 per week
-- "around 500", "500 pw" = Budget ~$500 per week
-- "400 to 600", "450" = Budget range around that amount
+- "around 500", "500 pw", "max 500" = MAX budget ≤$500/week (single number = upper limit, not a center)
+- "400 to 600" = Budget range $400-600
+- DO NOT expand a single number like "500" into a $425-575 range — treat it as ≤500
 
 Respond ONLY with valid JSON:
 {
@@ -236,10 +237,16 @@ function processWithSimpleRules(
   };
 
   const extractBudget = (msg: string) => {
+    // Range: $400-600 or $400 to 600
     const rangeMatch = msg.match(/(\d+)\s*[-–to]+\s*(\d+)/);
     if (rangeMatch) return { min: parseInt(rangeMatch[1]), max: parseInt(rangeMatch[2]) };
+    // Single number: treat as MAX budget (≤ that amount)
+    // e.g. "500" → budget ≤ $500/week
     const numMatch = msg.match(/\b(\d{3,4})\b/);
-    if (numMatch) { const val = parseInt(numMatch[1]); if (val >= 100 && val <= 2000) return { min: val * 0.85, max: val * 1.15 }; }
+    if (numMatch) {
+      const val = parseInt(numMatch[1]);
+      if (val >= 100 && val <= 5000) return { min: 0, max: val };
+    }
     return null;
   };
 
@@ -321,8 +328,7 @@ function processWithSimpleRules(
 
   switch (currentStage) {
     case 'GREETING':
-      reply = `Hello! 👋 Welcome to HomeMatch AI! I'm your rental assistant.
-I can understand typos and abbreviations - like "chatwood" → Chatswood or "nwetown" → Newtown. 🏠
+      reply = `Hello! 👋 Welcome to HomeMatch AI! I'm your rental assistant. 🏠
 What is your name? (Optional)`;
       nextStage = 'COLLECTING_BASIC_INFO';
       break;
@@ -335,9 +341,17 @@ What is your name? (Optional)`;
       break;
     case 'COLLECTING_BUDGET':
       const budget = extractBudget(message);
-      if (budget) { updatedProfile.budget = budget; reply = `Perfect! Looking for around $${Math.round(budget.min)}-${Math.round(budget.max)} per week. `; }
-      else reply = 'No problem, we can skip the budget for now. ';
-      reply += 'Which area(s) would you like to live in? (e.g., Sydney CBD, Surry Hills, Newtown, Chatswood)';
+      if (budget) {
+        updatedProfile.budget = budget;
+        if (budget.min === 0) {
+          reply = `Looking for properties at $${budget.max}/week or below. `;
+        } else {
+          reply = `Looking for $${Math.round(budget.min)}-${Math.round(budget.max)} per week. `;
+        }
+      } else {
+        reply = 'No problem, we can skip the budget for now. ';
+      }
+      reply += 'Which area(s) would you like to live in? (e.g., Sydney CBD, Surry Hills, Newtown)';
       nextStage = 'COLLECTING_LOCATION';
       break;
     case 'COLLECTING_LOCATION':

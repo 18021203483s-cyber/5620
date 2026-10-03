@@ -23,7 +23,10 @@ export interface UserProfile {
   preferredAreas: string[];
   bedrooms: number;
   moveInDate: string;
+  // Soft requirements: nice-to-have features (weighted scoring)
   specialRequirements: string[];
+  // Hard requirements: must-have features (one-vote veto filter)
+  hardRequirements: string[];
   transportationNeeds: string[];
 }
 
@@ -63,6 +66,24 @@ export interface ScoredProperty extends Property {
   trainScore: number;       // 0-100: train stations nearby
   priceScore: number;        // 0-100: price reasonableness
   totalScore: number;        // 0-100: combined score
+  staticMapUrl?: string;     // Static map URL for display
+  nearbyParks?: POI[];
+  nearbyBusStops?: POI[];
+  nearbyTrainStations?: POI[];
+  llmAnalysis?: LLMAnalysis;
+}
+
+// LLM-generated analysis of a property's location (for display in the UI)
+export interface LLMAnalysis {
+  locationDescription: string;   // Main narrative, 3-5 sentences
+  walkabilityScore: number;
+  transitScore: number;
+  lifestyleScore: number;
+  enhancedMapScore: number;
+  recommendation: string;        // Short verdict, 1-2 sentences
+  highlights?: string[];          // 3-4 bullet points of strengths
+  commuteNotes?: string;          // How commuting to CBD / common destinations looks
+  lifestyleVibe?: string;         // Neighborhood character in a sentence
 }
 
 // Application for landlord
